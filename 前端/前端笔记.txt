@@ -48,11 +48,14 @@ Linter / Formatter：代码格式校验，ESLint 代码格式校验
 
 <img src="前端笔记.assets/image-20220904231804858.png" alt="image-20220904231804858" style="zoom:50%;" />
 
+上传文件存在文件大小与文件数量的限制，建议使用先将项目clone到本地，再通过push的方式将整个项目上传。
 
-
-
-
-
+~~~
+git add .
+git commit -m '上传名'
+git pull
+git push origin main
+~~~
 
 ## NORMAL
 
@@ -315,25 +318,81 @@ Vue提供了一个watch方法可以让使用者去[监听](https://so.csdn.net/s
 
 #### 1、安装vuex依赖
 
-**npm install vuex --save**
+~~~
+npm install vuex --save
+~~~
 
 #### 2、导入vuex包
 
-**import Vuex from 'vuex'**
+~~~
+import Vuex from 'vuex'
 
-**Vue.use(Vuex)**
+Vue.use(Vuex)
+~~~
 
 #### 3、创建store对象
 
-**const store = new Vuex.store({**
+~~~
+const store = new Vuex.Store({
 
-​    //state中存放的就是全局共享的数据
+ //state中存放的就是全局共享的数据
 
-​    **state:{ count:0 }**
+ state:{ count:0 }
 
-**})**
+})
+~~~
 
+#### 4、将store对象挂载到vue实例中
 
+~~~
+new vue({
+
+    el: "#app",
+
+    render: h => h(app),
+
+    router,
+
+    //将创建的共享数据对象，挂载到vue实例中
+
+    //所有的组件，就可以直接从store中获取全局的数据了
+
+    store
+
+})
+~~~
+
+![image-20220905114655409](前端笔记.assets/image-20220905114655409.png)
+
+先引入Vue与Vuex,再通过Vue.use将Vuex安装到项目中；
+
+通过new创建了一个 Vuex.store的构造函数的实例，并且暴露出去(export default)；
+
+![image-20220905142859951](前端笔记.assets/image-20220905142859951.png)
+
+在main.js中的vue实例上挂载store；
+
+### 核心概念
+
+#### 1、State
+
+State提供韦德公共数据源，所有共享的数据都要统一放到store的state中进行存储；
+
+~~~
+//创建store数据源，提供位移公共数据
+
+const store = new Vuex.Store({
+
+ state:{ count:0 }
+
+})
+~~~
+
+组件访问State中数据的第一种方式：
+
+~~~
+this.$store.state.全局数据
+~~~
 
 ## GTI RESET
 
@@ -346,3 +405,40 @@ Vue提供了一个watch方法可以让使用者去[监听](https://so.csdn.net/s
 ![image-20220829183705501](前端笔记.assets/image-20220829183705501.png)
 
 通过以上两部，拉错了的代码就回到了之前的状态。把commit message写的清楚有意义，方便代码出错，回退。
+
+(3)git push -f
+
+若是想直接强制推送，可以加上 -f 参数强制push;
+
+若是直接强制推送的话，那么之前对远程进行的操作与修改的版本将会消失(以你本地的版本为基准).
+且注意，这种消失是不可以进行版本回退的，因为你会发现远程的版本已经和你本地版本一样了.
+
+~~~
+**举个例子**就是，
+你和你(时空混乱 >_< )进行一场比赛，**本地你**还在起点线慢悠悠，**远程你**已经出发跑了100米。
+在这100米过程中，**远程你**喝了一瓶水，吃了一碗面。
+现在**本地你**要开跑了，正确做法是**pull远程你**，**本地你**直接从100米之后起跑，水和面都没浪费，也没有白跑。
+但是！如果 -f **强制push**了呢？那么**远程你**又被**本地你**强制变回起点线了，**远程你**的这个100米就白跑了，水和面都没留下痕迹…
+~~~
+
+## 报错集
+
+**Vue-cli 报 Trailing spaces not allowed no-trailing-spaces**
+
+报错的主要原因是由于 ESLint 检查到了多余的空格
+**解决方法一：**
+简单有效：根据提示删除多余的空格即可
+
+**解决方法二：**
+配置 .eslintrc.js 文件，如下
+找到 rules 字段,在其中添加：
+
+~~~
+rules: {
+	'no-irregular-whitespace': 'off'
+}
+~~~
+
+然后重新编译运行即可
+————————————————
+
