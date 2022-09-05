@@ -388,11 +388,169 @@ const store = new Vuex.Store({
 })
 ~~~
 
-组件访问State中数据的第一种方式：
+##### 组件访问State中数据的第一种方式：
 
 ~~~
 this.$store.state.全局数据
 ~~~
+
+##### 组件访问State中数据的第二种方式：
+
+~~~
+//1.从vuex中按需导入mapState函数
+
+import { mapState } from 'vuex'
+
+通过刚才导入的mapState函数，将当前组件需要的全局数据，映射为当
+
+前组件的computed计算属性：
+
+//2.将全局数据，映射为当前组件的计算属性
+
+computed: {
+
+   ...mapState(['count'])
+
+}
+~~~
+
+通过导入的mapState函数，将当前组件需要的全局数据，**映射为当前组件的computed计算属性：**
+
+#### 2、Mutation
+
+##### 2.1、定义mutation
+
+Mutation用于变更Store中的数据
+
+只能通过mutation变更Store数据，**不可以直接操作Store中的数据；**
+
+通过这种方式虽然操作起来稍微繁琐一些，但是可以集中监控所有数据的变化；
+
+![image-20220905232632606](前端笔记.assets/image-20220905232632606.png)
+
+在store的mutation位置定义函数，在vue中用store中提供的commit函数调用mutation中的函数；
+
+##### 2.2、mutation传递参数
+
+![image-20220905234754626](前端笔记.assets/image-20220905234754626.png)
+
+mutation第一个形参永远是state；
+
+##### 2.3、另一种触发mutation的方式
+
+![image-20220906001708105](前端笔记.assets/image-20220906001708105.png)
+
+与mapState类似，用mapMutations将store中的函数引入映射**(用拓展运算符"...")**为该组件的函数；
+
+~~~
+export default{
+
+    data(){
+    
+       return{}
+    
+    },
+    
+    computed:{
+    
+       ...mapState(['count'])
+    
+    },
+    
+    methods:{
+    
+    ...mapMutations(['sub']),
+    
+    btnHandler1(){
+    
+    //sub映射后可以和该组件中其他方法一样直接用this.的形式调用。
+       this.sub();
+    
+    }
+    
+    }
+
+}
+
+~~~
+
+#### mapState原理
+
+##### 1、...拓展运算符
+
+**针对对象和数组**
+
+通俗来说一般用于将对象展开
+示例代码：
+
+~~~
+let obj = {
+    name:'ivan',
+    age:21
+}
+
+let obj2 = {
+    ...obj
+}
+
+console.log(obj2)
+~~~
+
+此时输出的obj2包含obj的属性name,age
+
+##### 2、[]
+
+在声明函数名时，如需动态使用字符串作为函数名可以使用
+示例代码
+
+~~~
+let str = "myFun"
+
+function [str](){
+    console.log(123)
+}
+
+let str = "myFun"
+
+let obj = {
+    [str]: function() {
+        console.log(123);
+    }
+}
+
+obj.myFun()
+obj[str]()
+
+//123
+//123
+~~~
+
+##### 3、vuex辅助函数原理
+
+直接上代码
+
+~~~
+function mapState(arr) {
+  let obj = {};
+  arr.forEach(key => {
+    obj[key] = function() {
+      console.log(this);
+      return this.$store.state[key];
+    };
+  });
+  return obj;
+}
+~~~
+
+调用：
+
+```javascript
+computed: {
+    ...mapState(['name','age'])
+}
+```
+
+正是使用了扩展[运算符](https://so.csdn.net/so/search?q=运算符&spm=1001.2101.3001.7020)和[]实现，同理 mapGetters、mapMutations等原理与之相同
 
 ## GTI RESET
 
