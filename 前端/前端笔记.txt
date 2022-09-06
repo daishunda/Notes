@@ -474,6 +474,137 @@ export default{
 
 ~~~
 
+对于要传递参数的函数也可以用mapMutation来进行使用；
+
+~~~
+//在store中定义函数，step为传递的参数；
+//store中mutation中函数的第一个参数永远是state；
+
+mutation:{
+
+    subN(state,step){
+    
+        state.count -= step;
+    
+    }
+
+}
+
+//在vue中调入
+
+ ...mapMutations(['sub','subN']),
+ 
+ btnHandler2(){
+ 
+     this.subN(3);
+     
+     //输入的参数从第二个开始(step);
+ 
+ }
+ 
+~~~
+
+#### 3、Action
+
+##### 3.1、this.$store.dispatch
+
+触发actions异步任务时携带参数;
+
+actions触发流程：
+
+![image-20220906104523142](C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20220906104523142.png)
+
+在Actions中定义异步函数：
+
+```
+actions:{
+    //无参数传递
+    addasync(context){
+        
+        setTimeout(() => {
+        
+            //在actions中，不能直接修改state中的数据
+            //必须通过context.commit()触发某个mutation才行
+            context.commit('add')
+        
+        },1000)
+        
+    },
+    //有参数
+    addasyncN(context,step){
+        
+        setTimeout(() => {
+        
+            context.commit('add',step)
+        
+        },1000)
+        
+    }
+
+}
+```
+
+触发Actons：
+
+```
+methods:{
+
+    handle(){
+    
+    //在调用dispatch函数，
+    //触发actions时携带参数
+    this.$store.dispatch('addNAsync',5)
+    
+    },
+    
+    btnHandler4(){
+    
+        //传递参数从action中函数定义的第二位形参开始
+        this.$store.dispatch('addNAsync',5)
+    
+    }
+
+}
+```
+
+##### 3.2、mapActions
+
+与**mapMutation**和**mapState**用法类似；
+
+![image-20220906110429300](C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20220906110429300.png)
+
+#### 4、Getter
+
+getter用于对store中的数据进行加工处理形成新的**数据**；
+
+1、getter可以对Store中已有的数据加工处理之后形成新的数据，类似vue的计算属性；
+
+2、Store中的数据发生变化，Getter中的数据也会跟着变化；
+
+~~~
+//定义Getter
+const store = new Vuex.Store({
+
+    state:{
+    
+        count:0
+    
+    },
+    
+    getters:{
+    
+        //调用showNum的时候，返回字符串;
+        showNum: state => {
+        
+            return '当前最新的数量是【'+ state.count +'】'
+        
+        }
+    
+    }
+
+})
+~~~
+
 #### mapState原理
 
 ##### 1、...拓展运算符
@@ -599,4 +730,14 @@ rules: {
 
 然后重新编译运行即可
 ————————————————
+
+git pull过程出现：
+
+**fatal: unable to access 'https://github.com/daishunda/Notes.git/': Proxy CONNECT aborted**
+
+http.proxy出现问题：
+
+~~~
+git config --global --unset http.proxy
+~~~
 
