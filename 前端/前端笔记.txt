@@ -512,7 +512,7 @@ mutation:{
 
 actions触发流程：
 
-![image-20220906104523142](C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20220906104523142.png)
+![image-20220906104523142](前端笔记.assets/image-20220906104523142.png)
 
 在Actions中定义异步函数：
 
@@ -571,7 +571,7 @@ methods:{
 
 与**mapMutation**和**mapState**用法类似；
 
-![image-20220906110429300](C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20220906110429300.png)
+![image-20220906110429300](前端笔记.assets/image-20220906110429300.png)
 
 #### 4、Getter
 
@@ -580,6 +580,8 @@ getter用于对store中的数据进行加工处理形成新的**数据**；
 1、getter可以对Store中已有的数据加工处理之后形成新的数据，类似vue的计算属性；
 
 2、Store中的数据发生变化，Getter中的数据也会跟着变化；
+
+##### 4.1、配置getter
 
 ~~~
 //定义Getter
@@ -603,6 +605,22 @@ const store = new Vuex.Store({
     }
 
 })
+~~~
+
+##### 4.2、调用getter
+
+###### 4.2.1、this.$store.getters.名称
+
+###### 4.2.2、mapGetters
+
+~~~
+import { mapGetters } from 'vuex'
+
+computed:{
+
+    ...mapGetters(['showNum'])
+
+}
 ~~~
 
 #### mapState原理
