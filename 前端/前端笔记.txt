@@ -621,6 +621,7 @@ computed:{
     ...mapGetters(['showNum'])
 
 }
+//与state和Getter用法类似;
 ~~~
 
 #### mapState原理
@@ -699,7 +700,7 @@ computed: {
 }
 ```
 
-正是使用了扩展[运算符](https://so.csdn.net/so/search?q=运算符&spm=1001.2101.3001.7020)和[]实现，同理 mapGetters、mapMutations等原理与之相同
+正是使用了扩展[运算符](https://so.csdn.net/so/search?q=运算符&spm=1001.2101.3001.7020)和[]实现，同理 mapGetters、mapMutations等原理与之相同；
 
 ## GTI RESET
 
